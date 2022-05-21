@@ -1,10 +1,18 @@
 const userModel = require('../models/user');
 const errorFunction = require('../utils/errorFunction');
-const { CONFLICT } = require('../utils/statusCode');
+const { CONFLICT, NOT_FOUND } = require('../utils/statusCode');
 
 const getAll = async () => {
   const users = await userModel.getAll();
   return users;
+};
+
+const getById = async (id) => {
+  const user = await userModel.getById(id);
+
+  if (!user) throw errorFunction(NOT_FOUND, 'User does not exist');
+
+  return user;
 };
 
 const getByEmail = async (email) => {
@@ -25,4 +33,5 @@ module.exports = {
   create,
   getByEmail,
   getAll,
+  getById,
 };

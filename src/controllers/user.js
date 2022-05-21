@@ -8,6 +8,13 @@ const getAll = async (_req, res) => {
   return res.status(OK_STATUS).json(users);
 };
 
+const getById = async (req, res) => {
+  const { id } = req.params;
+  const user = await userService.getById(id);
+
+  return res.status(OK_STATUS).json(user);
+};
+
 const create = async (req, res) => {
   await userService.create(req.body);
 
@@ -21,4 +28,5 @@ const create = async (req, res) => {
 module.exports = {
   create,
   getAll,
+  getById,
 };
