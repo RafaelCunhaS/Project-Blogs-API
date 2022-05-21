@@ -1,11 +1,11 @@
 const generateToken = require('../utils/generateToken');
 const { OK_STATUS } = require('../utils/statusCode');
-const userService = require('../services/user');
+const checkUser = require('../services/login');
 
 module.exports = async (req, res) => {
   const { email } = req.body;
 
-  await userService.getByEmail(email);
+  await checkUser(email);
 
   const token = generateToken(email);
 
