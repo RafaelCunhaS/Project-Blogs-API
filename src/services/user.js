@@ -2,21 +2,27 @@ const userModel = require('../models/user');
 const errorFunction = require('../utils/errorFunction');
 const { CONFLICT } = require('../utils/statusCode');
 
+const getAll = async () => {
+  const users = await userModel.getAll();
+  return users;
+};
+
 const getByEmail = async (email) => {
   const user = await userModel.getByEmail(email);
-
-  if (user) throw errorFunction(CONFLICT, 'User already registered');
+  return user;
 };
 
 const create = async (object) => {
   const { email } = object;
-  await getByEmail(email);
+  const user = await getByEmail(email);
 
-  const createdUser = await userModel.create(object);
-  return createdUser;
+  if (user) throw errorFunction(CONFLICT, 'User already registered');
+
+  await userModel.create(object);
 };
 
 module.exports = {
   create,
   getByEmail,
+  getAll,
 };

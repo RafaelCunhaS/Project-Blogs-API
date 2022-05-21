@@ -1,5 +1,10 @@
 const { User } = require('../database/models');
 
+const getAll = async () => {
+  const users = await User.findAll();
+  return users;
+}
+
 const getByEmail = async (email) => {
   const user = User.findOne({ where: { email } });
   return user;
@@ -12,5 +17,6 @@ const create = async (object) => {
 
 module.exports = {
   getByEmail,
-  create
-}
+  create,
+  getAll,
+};
