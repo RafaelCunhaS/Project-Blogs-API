@@ -6,6 +6,9 @@ module.exports = (sequelize, DataTypes) => {
     userId: DataTypes.INTEGER,
     published: DataTypes.DATE,
     updated: DataTypes.DATE
+  }, {
+    createdAt: 'published',
+    updatedAt: 'updated'
   });
 
   BlogPost.associate = (models) => {

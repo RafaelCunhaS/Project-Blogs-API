@@ -23,15 +23,13 @@ module.exports = {
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE'
       },
-      createdAt: {
+      published: {
         allowNull: false,
-        type: Sequelize.DATE,
-        field: 'published'
+        type: Sequelize.DATE
       },
-      updatedAt: {
+      updated: {
         allowNull: false,
-        type: Sequelize.DATE,
-        field: 'updated'
+        type: Sequelize.DATE
       }
     });
   },
