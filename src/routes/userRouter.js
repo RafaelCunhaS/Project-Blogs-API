@@ -10,4 +10,6 @@ router.get('/:id', validateAuth, rescue(userController.getById));
 
 router.post('/', validateUser, rescue(userController.create));
 
+router.delete('/me', validateAuth, rescue(userController.remove));
+
 module.exports = router;
