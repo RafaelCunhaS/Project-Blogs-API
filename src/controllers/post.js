@@ -16,15 +16,26 @@ const getById = async (req, res) => {
 
 const create = async (req, res) => {
   const { title, content, categoryIds } = req.body;
-  const { id: userId } = req.user;
+  const { userId } = req.user;
 
   const post = await postService.create(userId, title, content, categoryIds);
 
   return res.status(CREATED).json(post);
 };
 
+const update = async (req, res) => {
+  const { userId } = req.user;
+  const { id } = req.params;
+  const { title, content } = req.body;
+
+  const post = await postService.update(userId, id, title, content);
+
+  return res.status(OK_STATUS).json(post);
+};
+
 module.exports = {
   create,
   getAll,
   getById,
+  update,
 };

@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 const { BlogPost, PostCategory, Category, User } = require('../database/models');
 const errorFunction = require('../utils/errorFunction');
-const { BAD_REQUEST, NOT_FOUND } = require('../utils/statusCode');
+const { BAD_REQUEST, NOT_FOUND, UNAUTHORIZED } = require('../utils/statusCode');
 const config = require('../database/config/config');
 
 const sequelize = new Sequelize(config.development);
@@ -46,8 +46,21 @@ const create = async (userId, title, content, categoryIds) => {
   return result;
 };
 
+const update = async (userId, postId, title, content) => {
+  const { user: { id } } = await getById(postId);
+
+  if (id !== userId) throw errorFunction(UNAUTHORIZED, 'Unauthorized user');
+  
+  await BlogPost.update({ title, content }, { where: { id } });
+
+  const post = await getById(postId);
+
+  return post;
+};
+
 module.exports = {
   create,
   getAll,
   getById,
+  update,
 };

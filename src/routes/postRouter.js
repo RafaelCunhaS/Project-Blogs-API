@@ -1,13 +1,16 @@
 const router = require('express').Router();
 const rescue = require('express-rescue');
 const postController = require('../controllers/post');
-const validatePost = require('../middlewares/validatePost');
+const validatePostCreation = require('../middlewares/validatePostCreation');
+const validatePostUpdate = require('../middlewares/validatePostUpdate');
 const validateAuth = require('../middlewares/auth');
 
 router.get('/', validateAuth, rescue(postController.getAll));
 
 router.get('/:id', validateAuth, rescue(postController.getById));
 
-router.post('/', validateAuth, validatePost, rescue(postController.create));
+router.post('/', validateAuth, validatePostCreation, rescue(postController.create));
+
+router.put('/:id', validateAuth, validatePostUpdate, rescue(postController.update));
 
 module.exports = router;
