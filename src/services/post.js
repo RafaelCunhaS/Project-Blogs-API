@@ -8,9 +8,9 @@ const config = require('../database/config/config');
 const sequelize = new Sequelize(config.development);
 
 const getAll = async (query) => {
-  console.log(query);
+  let { q } = query;
+  if (!q) q = '';
 
-  const { q } = query;
   const posts = await BlogPost.findAll({
     where: {
       [Op.or]: [
