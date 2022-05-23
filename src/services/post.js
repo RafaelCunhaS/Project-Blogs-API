@@ -1,23 +1,37 @@
-const postModel = require('../models/post');
-// const errorFunction = require('../utils/errorFunction');
+const Sequelize = require('sequelize');
+const { BlogPost, PostCategory, Category } = require('../database/models');
+const errorFunction = require('../utils/errorFunction');
+const { BAD_REQUEST } = require('../utils/statusCode');
+const config = require('../database/config/config');
+
+const sequelize = new Sequelize(config.development);
 
 const getAll = async () => {
-  const categories = await postModel.getAll();
+  const categories = await BlogPost.findAll();
   return categories;
 };
 
-const getById = async (id) => {
-  const category = await postModel.getById(id);
-  return category;
-};
-
 const create = async (userId, title, content, categoryIds) => {
-  const post = await postModel.create(userId, title, content, categoryIds);
-  return post;
+  const { count } = await Category.findAndCountAll({ where: { id: categoryIds } });
+
+  if (categoryIds.length !== count) {
+    throw errorFunction(BAD_REQUEST, '"categoryIds" not found');
+  }
+
+  const result = await sequelize.transaction(async (t) => {
+    const post = await BlogPost.create({ userId, title, content }, { transaction: t });
+
+    const postCategories = categoryIds.map((categoryId) => ({ postId: post.id, categoryId }));
+  
+    await PostCategory.bulkCreate(postCategories, { transaction: t });
+
+    return post;
+  });
+
+  return result;
 };
 
 module.exports = {
   create,
   getAll,
-  getById,
 };

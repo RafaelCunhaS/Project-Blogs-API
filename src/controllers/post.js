@@ -1,4 +1,4 @@
-const postService = require('../models/post');
+const postService = require('../services/post');
 const { CREATED } = require('../utils/statusCode');
 
 const getAll = async () => {

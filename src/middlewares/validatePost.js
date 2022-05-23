@@ -4,13 +4,13 @@ const errorFunction = require('../utils/errorFunction');
 const schema = Joi.object({
   title: Joi.string().required(),
   content: Joi.string().required(),
-  categoryIds: Joi.array().required(),
+  categoryIds: Joi.array().min(1).required(),
 });
 
 module.exports = (req, _res, next) => {
   const { error } = schema.validate(req.body);
 
-  if (error) return next(errorFunction(400, error.message));
+  if (error) return next(errorFunction(400, 'Some required fields are missing'));
 
   return next();
 };
