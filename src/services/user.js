@@ -17,7 +17,7 @@ const getById = async (id) => {
 
 const create = async (object) => {
   const { email } = object;
-  const user = User.findOne({ where: { email } });
+  const user = await User.findOne({ where: { email } });
 
   if (user) throw errorFunction(CONFLICT, 'User already registered');
 
