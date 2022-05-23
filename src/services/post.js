@@ -46,16 +46,25 @@ const create = async (userId, title, content, categoryIds) => {
   return result;
 };
 
-const update = async (userId, postId, title, content) => {
+const validateUser = async (userId, postId) => {
   const { user: { id } } = await getById(postId);
 
   if (id !== userId) throw errorFunction(UNAUTHORIZED, 'Unauthorized user');
+};
+
+const update = async (userId, id, title, content) => {
+  await validateUser(userId, id);
   
   await BlogPost.update({ title, content }, { where: { id } });
 
-  const post = await getById(postId);
+  const post = await getById(id);
 
   return post;
+};
+
+const remove = async (userId, id) => {
+  await validateUser(userId, id);
+  await BlogPost.destroy({ where: { id } });
 };
 
 module.exports = {
@@ -63,4 +72,5 @@ module.exports = {
   getAll,
   getById,
   update,
+  remove,
 };

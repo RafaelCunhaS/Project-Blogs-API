@@ -13,4 +13,6 @@ router.post('/', validateAuth, validatePostCreation, rescue(postController.creat
 
 router.put('/:id', validateAuth, validatePostUpdate, rescue(postController.update));
 
+router.delete('/:id', validateAuth, rescue(postController.remove));
+
 module.exports = router;
