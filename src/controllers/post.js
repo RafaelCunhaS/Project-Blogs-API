@@ -1,8 +1,8 @@
 const postService = require('../services/post');
 const { CREATED, OK_STATUS, NO_CONTENT } = require('../utils/statusCode');
 
-const getAll = async (_req, res) => {
-  const posts = await postService.getAll();
+const getAll = async (req, res) => {
+  const posts = await postService.getAll(req.query);
   
   return res.status(OK_STATUS).json(posts);
 };

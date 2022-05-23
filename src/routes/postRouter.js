@@ -7,6 +7,8 @@ const validateAuth = require('../middlewares/auth');
 
 router.get('/', validateAuth, rescue(postController.getAll));
 
+router.get('/search', validateAuth, rescue(postController.getAll));
+
 router.get('/:id', validateAuth, rescue(postController.getById));
 
 router.post('/', validateAuth, validatePostCreation, rescue(postController.create));

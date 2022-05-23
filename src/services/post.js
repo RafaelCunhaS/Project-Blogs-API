@@ -1,4 +1,5 @@
 const Sequelize = require('sequelize');
+const { Op } = require('sequelize');
 const { BlogPost, PostCategory, Category, User } = require('../database/models');
 const errorFunction = require('../utils/errorFunction');
 const { BAD_REQUEST, NOT_FOUND, UNAUTHORIZED } = require('../utils/statusCode');
@@ -6,8 +7,17 @@ const config = require('../database/config/config');
 
 const sequelize = new Sequelize(config.development);
 
-const getAll = async () => {
-  const posts = await BlogPost.findAll({ 
+const getAll = async (query) => {
+  console.log(query);
+
+  const { q } = query;
+  const posts = await BlogPost.findAll({
+    where: {
+      [Op.or]: [
+        { title: { [Op.like]: `%${q}%` } },
+        { content: { [Op.like]: `%${q}%` } },
+      ],
+    },
     include: [{ model: User, as: 'user', attributes: { exclude: 'password' } },
     { model: Category, as: 'categories', through: { attributes: [] } }],
   });
