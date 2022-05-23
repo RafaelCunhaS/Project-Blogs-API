@@ -16,11 +16,11 @@ const getById = async (req, res) => {
 };
 
 const create = async (req, res) => {
-  await userService.create(req.body);
+  const id = await userService.create(req.body);
 
   const { email } = req.body;
   
-  const token = generateToken(email);
+  const token = generateToken(id, email);
 
   return res.status(CREATED).json({ token });
 };

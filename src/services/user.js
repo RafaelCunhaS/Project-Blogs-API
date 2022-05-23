@@ -26,7 +26,8 @@ const create = async (object) => {
 
   if (user) throw errorFunction(CONFLICT, 'User already registered');
 
-  await userModel.create(object);
+  const id = await userModel.create(object);
+  return id;
 };
 
 module.exports = {

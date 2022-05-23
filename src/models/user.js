@@ -16,8 +16,8 @@ const getByEmail = async (email) => {
 }
 
 const create = async (object) => {
-  const user = User.create(object);
-  return user;
+  const { id } = User.create(object);
+  return id;
 }
 
 module.exports = {

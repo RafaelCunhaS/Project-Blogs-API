@@ -5,9 +5,9 @@ const checkUser = require('../services/login');
 module.exports = async (req, res) => {
   const { email } = req.body;
 
-  await checkUser(email);
+  const id = await checkUser(email);
 
-  const token = generateToken(email);
+  const token = generateToken(id, email);
 
   res.status(OK_STATUS).json({ token });
 };
