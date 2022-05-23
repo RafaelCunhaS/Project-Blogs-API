@@ -1,7 +1,7 @@
 const Sequelize = require('sequelize');
 const { BlogPost, PostCategory, Category, User } = require('../database/models');
 const errorFunction = require('../utils/errorFunction');
-const { BAD_REQUEST } = require('../utils/statusCode');
+const { BAD_REQUEST, NOT_FOUND } = require('../utils/statusCode');
 const config = require('../database/config/config');
 
 const sequelize = new Sequelize(config.development);
@@ -13,6 +13,17 @@ const getAll = async () => {
   });
 
   return posts;
+};
+
+const getById = async (id) => {
+  const post = await BlogPost.findByPk(id, { 
+    include: [{ model: User, as: 'user', attributes: { exclude: 'password' } },
+    { model: Category, as: 'categories', through: { attributes: [] } }],
+  });
+
+  if (!post) throw errorFunction(NOT_FOUND, 'Post does not exist');
+
+  return post;
 };
 
 const create = async (userId, title, content, categoryIds) => {
@@ -38,4 +49,5 @@ const create = async (userId, title, content, categoryIds) => {
 module.exports = {
   create,
   getAll,
+  getById,
 };
