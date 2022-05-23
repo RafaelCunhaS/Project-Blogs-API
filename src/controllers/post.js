@@ -1,9 +1,10 @@
 const postService = require('../services/post');
-const { CREATED } = require('../utils/statusCode');
+const { CREATED, OK_STATUS } = require('../utils/statusCode');
 
-const getAll = async () => {
-  const categories = await postService.getAll();
-  return categories;
+const getAll = async (_req, res) => {
+  const posts = await postService.getAll();
+  
+  return res.status(OK_STATUS).json(posts);
 };
 
 const create = async (req, res) => {
