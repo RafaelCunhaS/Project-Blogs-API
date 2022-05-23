@@ -9,7 +9,9 @@ module.exports = async (req, _res, next) => {
   if (!token) return next(errorFunction(UNAUTHORIZED, 'Token not found'));
 
   try {
-    jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+    req.user = decoded.data;
 
     return next();
   } catch (err) {
