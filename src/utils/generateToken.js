@@ -3,7 +3,7 @@ require('dotenv').config();
 
 module.exports = (id, email) => {
   const jwtConfig = {
-    expiresIn: '1h',
+    expiresIn: '1d',
     algorithm: 'HS256',
   };
   
