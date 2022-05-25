@@ -20,7 +20,7 @@ describe('Rota /post', () => {
     stub(User, 'findOne').callsFake(userMock.findOne);
     stub(Category, 'findAndCountAll').callsFake(categoryMock.findAndCountAll);
     stub(PostCategory, 'bulkCreate').resolves();
-    // stub(sequelize, 'transaction').resolves();
+    stub(sequelize, 'transaction').resolves();
     stub(BlogPost, 'create').callsFake(blogPostMock.create);
     stub(BlogPost, 'findAll').callsFake(blogPostMock.findAll);
     stub(BlogPost, 'findByPk').callsFake(blogPostMock.findById);
@@ -32,7 +32,7 @@ describe('Rota /post', () => {
     User.findOne.restore();
     Category.findAndCountAll.restore();
     PostCategory.bulkCreate.restore();
-    // sequelize.transaction.restore();
+    sequelize.transaction.restore();
     BlogPost.create.restore();
     BlogPost.findAll.restore();
     BlogPost.findByPk.restore();

@@ -1,11 +1,11 @@
-// const Sequelize = require('sequelize');
+const Sequelize = require('sequelize');
 const { Op } = require('sequelize');
 const { BlogPost, PostCategory, Category, User } = require('../database/models');
 const errorFunction = require('../utils/errorFunction');
 const { BAD_REQUEST, NOT_FOUND, UNAUTHORIZED } = require('../utils/statusCode');
-// const config = require('../database/config/config');
+const config = require('../database/config/config');
 
-// const sequelize = new Sequelize(config.development);
+const sequelize = new Sequelize(config.development);
 
 const getAll = async (query) => {
   let { q } = query;
@@ -43,17 +43,17 @@ const create = async (userId, title, content, categoryIds) => {
     throw errorFunction(BAD_REQUEST, '"categoryIds" not found');
   }
 
-  // const result = await sequelize.transaction(async (t) => {
-    const post = await BlogPost.create({ userId, title, content });
+  const result = await sequelize.transaction(async (t) => {
+    const post = await BlogPost.create({ userId, title, content }, { transaction: t });
 
     const postCategories = categoryIds.map((categoryId) => ({ postId: post.id, categoryId }));
   
-    await PostCategory.bulkCreate(postCategories);
+    await PostCategory.bulkCreate(postCategories, { transaction: t });
 
     return post;
-  // });
+  });
 
-  // return result;
+  return result;
 };
 
 const validateUser = async (userId, postId) => {
