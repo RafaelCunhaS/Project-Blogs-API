@@ -2,7 +2,7 @@
 
 Back-end project made while studying at Trybe, a web development school.
 
-In this project I developed a RESTful API and a database (_MySQL_) for producing content for a blog. I developed the app with _Node.js_ using the __Sequelize__ package to make a _CRUD_ (Create, Read, Update, Delete) of posts, also working with relationships and associations of the tables. With a bonus of 100% test coverage with integration tests.
+In this project I developed a RESTful API with the _MSC_ architecture and a database (_MySQL_) for producing content for a blog. I developed the app with _Node.js_ using the __Sequelize__ package to make a _CRUD_ (Create, Read, Update, Delete) of posts, also working with relationships and associations of the tables. With a bonus of 100% test coverage with integration tests.
 
 ### How to run the project
 
