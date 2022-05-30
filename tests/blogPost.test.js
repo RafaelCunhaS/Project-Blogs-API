@@ -1,12 +1,9 @@
 const chai = require('chai');
-const Sequelize = require('sequelize');
 const { stub } = require('sinon');
 const chaiHttp = require('chai-http');
 const { User, BlogPost, Category, PostCategory } = require('../src/database/models');
 const { BlogPost: blogPostMock, User: userMock, Category: categoryMock } = require('./mocks');
-const config = require('../src/database/config/config');
-
-const sequelize = new Sequelize(config.development);
+const { sequelize } = require('../src/services/post')
 
 chai.use(chaiHttp);
 
@@ -20,7 +17,14 @@ describe('Rota /post', () => {
     stub(User, 'findOne').callsFake(userMock.findOne);
     stub(Category, 'findAndCountAll').callsFake(categoryMock.findAndCountAll);
     stub(PostCategory, 'bulkCreate').resolves();
-    stub(sequelize, 'transaction').resolves();
+    stub(sequelize, 'transaction').resolves({
+      "id": 3,
+      "title": "Latest updates, August 1st",
+      "content": "The whole text for the blog post goes here in this key",
+      "userId": 1,
+      "updated": "2022-05-18T18:00:01.196Z",
+      "published": "2022-05-18T18:00:01.196Z"
+    });
     stub(BlogPost, 'create').callsFake(blogPostMock.create);
     stub(BlogPost, 'findAll').callsFake(blogPostMock.findAll);
     stub(BlogPost, 'findByPk').callsFake(blogPostMock.findById);
@@ -201,31 +205,21 @@ describe('Rota /post', () => {
 
     describe('caso a requisição seja resolvida com sucesso', () => {
       let response;
-      let firstList;
-      let secondList;
 
       before( async () => {
         const { body: { token } } = await chai.request(app).post('/login').send({
           email: "lewishamilton@gmail.com",
           password: "123456"
         });
-        firstList = await chai.request(app).get('/post').set('authorization', token);
         response = await chai.request(app).post('/post').set('authorization', token).send({
           title: "exemplo de título",
           content: "exemplo de texto",
           categoryIds: [1, 2]
         });
-        secondList = await chai.request(app).get('/post').set('authorization', token);
       });
 
       it('deve retornar código de status 201', () => {
         expect(response).to.have.status(201);
-      });
-      it('a primeira requisição GET deve retornar uma lista com 2 objetos', () => {
-        expect(firstList.body).to.have.length(2);
-      });
-      it('a segunda requisição GET deve retornar uma lista com 3 objetos', () => {
-        expect(secondList.body).to.have.length(3);
       });
       it('o corpo da resposta deve ser um objeto', () => {
         expect(response.body).to.be.a('object');

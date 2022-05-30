@@ -83,4 +83,5 @@ module.exports = {
   getById,
   update,
   remove,
+  sequelize,
 };
