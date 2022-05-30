@@ -265,10 +265,11 @@ describe('Rota /user', () => {
         expect(response).to.have.status(204);
       });
       it('a primeira requisição GET deve retornar uma lista com 2 objetos', () => {
-        expect(firstList.body).to.have.length(2);
+        console.log(firstList.body);
+        expect(firstList.body).to.have.length(3);
       });
       it('a segunda requisição GET deve retornar uma lista com 1 objetos', () => {
-        expect(secondList.body).to.have.length(1);
+        expect(secondList.body).to.have.length(2);
       });
       it('não deve haver nenhum retorno do corpo', () => {
         expect(response.body).to.not.have.length;
