@@ -201,21 +201,31 @@ describe('Rota /post', () => {
 
     describe('caso a requisição seja resolvida com sucesso', () => {
       let response;
+      let firstList;
+      let secondList;
 
       before( async () => {
         const { body: { token } } = await chai.request(app).post('/login').send({
           email: "lewishamilton@gmail.com",
           password: "123456"
         });
+        firstList = await chai.request(app).get('/post').set('authorization', token);
         response = await chai.request(app).post('/post').set('authorization', token).send({
           title: "exemplo de título",
           content: "exemplo de texto",
           categoryIds: [1, 2]
         });
+        secondList = await chai.request(app).get('/post').set('authorization', token);
       });
 
       it('deve retornar código de status 201', () => {
         expect(response).to.have.status(201);
+      });
+      it('a primeira requisição GET deve retornar uma lista com 2 objetos', () => {
+        expect(firstList.body).to.have.length(2);
+      });
+      it('a segunda requisição GET deve retornar uma lista com 3 objetos', () => {
+        expect(secondList.body).to.have.length(3);
       });
       it('o corpo da resposta deve ser um objeto', () => {
         expect(response.body).to.be.a('object');
@@ -304,19 +314,29 @@ describe('Rota /post', () => {
   });
 
   describe('testa o verbo DELETE na rota /post/:id', () => {
-    describe('remove o usuário do BD', () => {
+    describe('remove o post do BD', () => {
       let response;
+      let firstList;
+      let secondList;
 
       before( async () => {
         const { body: { token } } = await chai.request(app).post('/login').send({
           email: "lewishamilton@gmail.com",
           password: "123456"
         });
+        firstList = await chai.request(app).get('/post').set('authorization', token);
         response = await chai.request(app).delete('/post/1').set('authorization', token);
+        secondList = await chai.request(app).get('/post').set('authorization', token);
       })
 
       it('deve retornar código de status 204', () => {
         expect(response).to.have.status(204);
+      });
+      it('a primeira requisição GET deve retornar uma lista com 2 objetos', () => {
+        expect(firstList.body).to.have.length(2);
+      });
+      it('a segunda requisição GET deve retornar uma lista com 1 objetos', () => {
+        expect(secondList.body).to.have.length(1);
       });
       it('não deve haver nenhum retorno do corpo', () => {
         expect(response.body).to.not.have.length;
