@@ -28,7 +28,7 @@ const mockFindById = (Instance, id) => {
 
 const mockRemove = (Instance, id) => {
   const newData = Instance.filter((user) => user.id !== Number(id.where.id));
-  Instance.push(newData);
+  Instance.splice(0, Instance.length, ...newData);
   return;
 }
 
